@@ -21,6 +21,9 @@ sed -i "s/_SERVER_NAME_/$hostipaddr/g" nginx/registry.conf
 #htpasswd -bn test abcd1234 > nginx/registry.passwd
 #sed -i "s/#auth_basic/auth_basic/g" nginx/registry.conf
 
+#install docker-compose
+#curl -L https://github.com/docker/compose/releases/download/VERSION_NUM/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+#chmod +x /usr/local/bin/docker-compose
 
 #docker-compose up
 #docker pull nginx:latest
