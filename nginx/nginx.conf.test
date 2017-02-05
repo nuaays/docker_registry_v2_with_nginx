@@ -1,0 +1,73 @@
+user                nginx;
+worker_processes    4;
+error_log           /alidata1/logs/nginx/error.log;
+# make sure /etc/security/limits.conf is sensible
+worker_rlimit_nofile    65535;
+#
+events {
+    use epoll;
+    worker_connections  20480;
+}
+#
+
+http {
+#    include                                 cache.conf;
+    include                                 control.conf;
+#    include                                 maps.conf;
+
+    include                                 vhost/*.outer;
+
+
+    server_tokens off;
+
+    upstream docker-registry {
+       server 127.0.0.1:5000;
+    }
+
+    server {
+       listen 80;
+       server_name 10.139.99.150;
+       client_max_body_size 0;
+       chunked_transfer_encoding on;
+       
+
+       location /v2/ {
+          #if ($http_user_agent ~ "^(docker\/1\.(3|4|5(?!\.[0-9]-dev))|Go ).*$" ) {
+          #   return 404;
+          #}
+          #add_header 'Docker-Distribution-Api-Version' 'registry/2.0' always;
+          add_header 'Docker-Distribution-Api-Version' 'registry/2.0';
+          #
+          #allow 10.0.0.0/24;
+          #deny all;
+          #allow 127.0.0.1;
+          #deny all;
+          #if ( $request_method ~ ^(POST|PATCH|PUT)$ ) {
+          #     allow 10.0.0.0/24;
+          #     deny all;
+          #}
+
+          proxy_pass                          http://docker-registry;
+          proxy_set_header  Host              $http_host;   # required for docker client's sake
+          proxy_set_header  X-Real-IP         $remote_addr; # pass on real client's IP
+          proxy_set_header  X-Forwarded-For   $proxy_add_x_forwarded_for;
+          proxy_set_header  X-Forwarded-Proto $scheme;
+          proxy_read_timeout                  900;
+       }
+     
+       location ~ ^/(os/env)/ {
+          allow 127.0.0.1;
+          deny all;
+       }
+       
+       location ^~ "/v2/(os|env)/.*" {
+          # only let get/head request pass
+          if ( $request_method ~ ^(GET|HEAD)$ ) {
+               return 404;
+          }
+       }
+
+       
+    }
+
+}

@@ -1,0 +1,28 @@
+
+#### Reference ####
+#http://blog.csdn.net/ljf10010/article/details/47952849
+#https://www.digitalocean.com/community/tutorials/how-to-set-up-a-private-docker-registry-on-ubuntu-14-04
+#nginx conf: http://www.cszhi.com/20120513/nginx_nginx-conf.html
+
+
+#clean
+rm -rf registry_v2_data
+
+#set server_name
+cp -f nginx/registry.conf.sample nginx/registry.conf
+cp -f nginx/nginx.conf.sample    nginx/nginx.conf
+hostipaddr=`hostname -i | awk '{print $1}'`
+sed -i "s/_SERVER_NAME_/$hostipaddr/g" nginx/registry.conf
+
+
+#### if enable basic auth using password
+#### [Ubuntu] apt-get install -y apache2-utils [CentOS] yum install -y httpd-tools
+#yum install -y httpd-tools
+#htpasswd -bn test abcd1234 > nginx/registry.passwd
+#sed -i "s/#auth_basic/auth_basic/g" nginx/registry.conf
+
+
+#docker-compose up
+#docker pull nginx:latest
+#docker pull registry:2.5
+docker-compose up
