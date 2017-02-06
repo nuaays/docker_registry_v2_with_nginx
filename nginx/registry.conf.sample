@@ -17,6 +17,10 @@ server {
   # required to avoid HTTP 411: see Issue #1486 (https://github.com/docker/docker/issues/1486)
   chunked_transfer_encoding on;
 
+  location /v1/ {
+    return 404;
+  }
+
   location /v2/ {
     # Do not allow connections from docker 1.5 and earlier
     # docker pre-1.6.0 did not properly set the user agent on ping, catch "Go *" user agents
@@ -26,7 +30,17 @@ server {
 
     #allow 10.0.0.0/24;
     #allow  127.0.0.1;
+    #allow 192.168.3.145;
     #deny all;
+
+    #####  only allow docker push os/env
+    #set $request_type "0";
+    #if ($request_uri !~ "^/v2/(os|env)/.*$") {
+    #   set $request_type "${request_type}1";
+    #}
+    #if ($request_type = "01") {
+    #   return 404 "[ERROR] restrict docker push this repo";
+    #}
 
     # To add basic authentication to v2 use auth_basic setting plus add_header
     #auth_basic "registry.localhost";
@@ -49,6 +63,18 @@ server {
   #        return 404;
   #   }
   #}
+
+  #restrict docker push
+  #if ($request_method !~ ^(PATCH|PUT|POST)$ ) {
+  #    return 405;
+  #}
+
+  #location ~ ^/v2/(env|os)/ {
+  #   if ( $request_method !~ ^(PATCH|POST|PUT)$ ) {
+  #       return 403;
+  #   }
+  #}
+
 
 
 }
