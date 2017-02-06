@@ -24,6 +24,9 @@ sed -i "s/_SERVER_NAME_/$hostipaddr/g" nginx/registry.conf
 #install docker-compose
 #curl -L https://github.com/docker/compose/releases/download/VERSION_NUM/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
 #chmod +x /usr/local/bin/docker-compose
+#or
+#yum install -y python-pip
+#pip install docker-compose -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host mirrors.aliyun.com
 
 #docker-compose up
 #docker pull nginx:latest
