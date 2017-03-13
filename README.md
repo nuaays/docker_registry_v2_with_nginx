@@ -11,6 +11,7 @@
 
 
 ##Reference
+* https://www.digitalocean.com/community/tutorials/how-to-set-up-a-private-docker-registry-on-ubuntu-14-04
 * https://github.com/docker/distribution/tree/release/2.0/contrib/compose/nginx
 * https://github.com/othillo/docker-registry-nginx/blob/master/nginx/nginx.conf
 
