@@ -18,6 +18,7 @@
 
 
 ##usage of htpasswd
+http://blog.csdn.net/fdipzone/article/details/41020045
 
 * htpasswd安装
 ```
