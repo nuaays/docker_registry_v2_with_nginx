@@ -13,3 +13,23 @@
 ##Reference
 * https://github.com/docker/distribution/tree/release/2.0/contrib/compose/nginx
 * https://github.com/othillo/docker-registry-nginx/blob/master/nginx/nginx.conf
+
+
+
+
+##usage of htpasswd
+
+* htpasswd安装
+```
+[Ubuntu] apt-get -y install apache2-utils
+[CentOS] yum install httpd-tools
+
+```
+
+* htpasswd生产密码
+
+```
+htpasswd -nb[mdps] username password
+docker run --entrypoint htpasswd registry:2.4.1 -Bbn username password >> .htpasswd
+
+```
